@@ -3,10 +3,8 @@ const crypto = require('crypto');
 
 const app = express();
 
-// ─── Middlewares ───────────────────────────────────────────────────────────────
 app.use(express.json());
 
-// CORS – necessário para acesso via apps mobile / navegador
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -15,7 +13,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// ─── Banco de dados em memória ─────────────────────────────────────────────────
 let jogos = [
   {
     id: 1,
@@ -35,7 +32,6 @@ let jogos = [
 
 let nextId = 3;
 
-// ─── POST /login ───────────────────────────────────────────────────────────────
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -46,12 +42,10 @@ app.post('/login', (req, res) => {
   return res.status(401).json({ error: 'Credenciais inválidas.' });
 });
 
-// ─── GET /jogos ────────────────────────────────────────────────────────────────
 app.get('/jogos', (req, res) => {
   return res.status(200).json(jogos);
 });
 
-// ─── GET /jogos/:id ────────────────────────────────────────────────────────────
 app.get('/jogos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const jogo = jogos.find((j) => j.id === id);
@@ -63,7 +57,6 @@ app.get('/jogos/:id', (req, res) => {
   return res.status(200).json(jogo);
 });
 
-// ─── POST /jogos ───────────────────────────────────────────────────────────────
 app.post('/jogos', (req, res) => {
   const { nome, tipo, nota, review } = req.body;
 
@@ -73,7 +66,6 @@ app.post('/jogos', (req, res) => {
   return res.status(201).json(novoJogo);
 });
 
-// ─── PUT /jogos/:id ────────────────────────────────────────────────────────────
 app.put('/jogos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = jogos.findIndex((j) => j.id === id);
@@ -88,7 +80,6 @@ app.put('/jogos/:id', (req, res) => {
   return res.status(200).json(jogos[index]);
 });
 
-// ─── DELETE /jogos/:id ─────────────────────────────────────────────────────────
 app.delete('/jogos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = jogos.findIndex((j) => j.id === id);
@@ -102,7 +93,6 @@ app.delete('/jogos/:id', (req, res) => {
   return res.status(204).send();
 });
 
-// ─── Inicialização ─────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`API rodando na porta ${PORT}`);
